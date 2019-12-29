@@ -1,0 +1,17 @@
+{
+ "name": "Calculator",
+ "version": "1.0.0",
+ "description": "",
+ "main": "index.js",
+ "scripts": {
+  "dev": "http-server ./src -p8080 -c-1",
+  "test": "echo \"Error: no test specified\" && exit 1",
+  "build": "echo \"Error: no build specified\" && exit 1"
+ },
+ "keywords": [],
+ "author": "",
+ "license": "ISC",
+ "devDependencies": {
+  "http-server": "^0.12.0"
+ }
+}
