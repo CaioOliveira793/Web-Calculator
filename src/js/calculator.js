@@ -6,17 +6,21 @@ let expression = "";
 const isNumber = (value) => !isNaN(parseInt(value, 10));
 
 const addOperation = (operator) => {
-	const lastExpressionValue = expression[expression.length - 1];
+	const currentNumber = displayCurrent.innerHTML;
 
-	if (!isNumber(lastExpressionValue)) {
-		if (displayCurrent.innerHTML === "") {
-			expression = expression.slice(0, -1) + operator;
-		} else {
-			expression += ` ${parseFloat(displayCurrent.innerHTML)} ${operator}`;
-		}
+	if (currentNumber === "") {
+		displayExpression.innerHTML = `${displayExpression.innerHTML.slice(0, -1)} ${operator}`;
+	} else {
+		displayExpression.innerHTML += ` ${currentNumber} ${operator}`;
+		expression = displayExpression.innerHTML.slice(0, -2);
+		displayCurrent.innerHTML = "";
 	}
-	displayExpression.innerHTML = expression;
-	displayCurrent.innerHTML = "";
+
+	if (operator === "=") {
+		displayCurrent.innerHTML = eval(expression);
+		displayExpression.innerHTML = "";
+		expression = "";
+	}
 }
 
 const operations = {
@@ -55,20 +59,7 @@ const operations = {
 			displayCurrent.innerHTML = "-" + currentNumber;
 	},
 	["="]: () => {
-		const operator = "=";
-		const lastExpressionValue = expression[expression.length - 1];
-
-		if (isNaN(parseInt(lastExpressionValue, 10))) {
-			if (displayCurrent.innerHTML === "") {
-				expression = expression.slice(0, -1);
-				displayExpression.innerHTML = expression + operator;
-
-				if (operator === "=")
-					displayCurrent.innerHTML = eval(expression);
-			} else {
-				expression += ` ${parseFloat(displayCurrent.innerHTML)} ${operator}`;
-			}
-		}
+		addOperation("=");
 	}
 }
 
