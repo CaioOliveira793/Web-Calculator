@@ -6,6 +6,8 @@ class Calculator {
 		this.expression = '';
 		this.numberEl.innerHTML = '0';
 
+		this.operationConcluded = false;
+
 		const btnNumbers = [...document.querySelectorAll(queryBtnNumbersEl)];
 		const btnOperations = [...document.querySelectorAll(queryBtnOperationsEl)];
 
@@ -78,18 +80,23 @@ class Calculator {
 		const currentNumber = this.numberEl.innerHTML;
 		const currentExpression = this.expressionEl.innerHTML.slice(0, -1);
 
+		if (this.operationConcluded === true) {
+			this.operationConcluded = false;
+			this.expressionEl.innerHTML = '';
+		}
+
 		if (currentNumber === '') {
 			this.expressionEl.innerHTML = `${currentExpression} ${operator}`;
 		} else {
 			this.expressionEl.innerHTML += ` ${currentNumber} ${operator}`;
-			this.expression = currentExpression.slice(0, -1);
+			this.expression = this.expressionEl.innerHTML.slice(0, -1);
 			this.numberEl.innerHTML = '';
 		}
 
 		if (operator === '=') {
 			this.numberEl.innerHTML = eval(this.expression);
-			this.expressionEl.innerHTML = '';
 			this.expression = '';
+			this.operationConcluded = true;
 		}
 	}
 }
