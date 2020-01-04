@@ -1,32 +1,35 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:300,400&display=swap');
 
 .calculator {
-	width: 300px;
-	margin: auto;
+	width: 220px;
+	height: 320px;
+	margin: 50px auto;
+	border: solid 1px #3e3e3e;
 	font-family: 'Montserrat', Helvetica, sans-serif;
 	display: grid;
 	grid-template-columns: repeat(4, 1fr);
-	grid-template-rows: 1.1fr 1.2fr repeat(5, 1fr);
+	grid-template-rows: repeat(7, 1fr);
 }
 
 .display-expression, .display-number {
-	box-sizing: border-box;
 	grid-column: 1 / span 4;
-	text-align: right;
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: center;
+	justify-content: flex-end;
+	padding: 5px 10px;
 	overflow: hidden;
-	margin: 1px;
-	padding: 10px;
-
-	/* debugging */
-	border: solid 1px black;
+	white-space: nowrap;
+	background-color: #494747;
+	color: white;
 }
 
 .display-expression {
-	font-size: 1.3em;
+	font-size: 16px;
 }
 
 .display-number {
-	font-size: 1.8em;
+	font-size: 20px;
 }
 
 .btn-CE {
@@ -37,19 +40,23 @@
 	box-sizing: border-box;
 	padding: 12px;
 	font-family: inherit;
-	font-size: 1.2em;
-	border: solid 1px rgb(65, 65, 65);
-	margin: 1px;
+	font-size: 20px;
+	border: solid 1px #3e3e3e;
+	margin: 0;
 }
 
 .btn-number {
-	background: #30a5e9;
+	background: #f8c22d;
 }
 
 .btn-operator {
-	background: #8121ff;
+	background: #ffe835;
 }
 
-.btn-number:hover, .btn-operator:hover {
-	opacity: 1;
+.btn-number:hover {
+	background: #f5b402;
+}
+
+.btn-operator:hover {
+	background: #ffd901;
 }
