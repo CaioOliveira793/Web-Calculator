@@ -1,90 +1,97 @@
-const displayExpression = document.getElementsByClassName("display-expression")[0];
-const displayCurrent = document.getElementsByClassName("display-current")[0];
+class Calculator {
+	constructor(queryExpressionEl, queryNumberEl, queryBtnNumbersEl, queryBtnOperationsEl) {
+		this.expressionEl = document.querySelector(queryExpressionEl);
+		this.numberEl = document.querySelector(queryNumberEl);
 
-let expression = "";
+		this.expression = '';
+		this.numberEl.innerHTML = '0';
 
-const isNumber = (value) => !isNaN(parseInt(value, 10));
+		const btnNumbers = [...document.querySelectorAll(queryBtnNumbersEl)];
+		const btnOperations = [...document.querySelectorAll(queryBtnOperationsEl)];
 
-const addOperation = (operator) => {
-	const currentNumber = displayCurrent.innerHTML;
-
-	if (currentNumber === "") {
-		displayExpression.innerHTML = `${displayExpression.innerHTML.slice(0, -1)} ${operator}`;
-	} else {
-		displayExpression.innerHTML += ` ${currentNumber} ${operator}`;
-		expression = displayExpression.innerHTML.slice(0, -2);
-		displayCurrent.innerHTML = "";
+		this.setCalculatorEvents(btnNumbers, btnOperations);
 	}
 
-	if (operator === "=") {
-		displayCurrent.innerHTML = eval(expression);
-		displayExpression.innerHTML = "";
-		expression = "";
-	}
-}
+	operations = {
+		["CE"]: () => {
+			this.numberEl.innerHTML = '0';
+		},
+		["C"]: () => {
+			this.numberEl.innerHTML = '0';
+			this.expressionEl.innerHTML = '';
+			this.expression = '';
+		},
+		["."]: () => {
+			if (this.numberEl.innerHTML === '')
+				this.numberEl.innerHTML = '0.';
+			else if (!this.numberEl.innerHTML.includes('.'))
+				this.numberEl.innerHTML += '.';
+		},
+		["+/-"]: () => {
+			if (this.numberEl.innerHTML === '') return;
 
-const operations = {
-	["CE"]: () => {
-		displayCurrent.innerHTML = "0";
-	},
-	["C"]: () => {
-		displayCurrent.innerHTML = "0";
-		displayExpression.innerHTML = expression = "";
-	},
-	["+"]: () => {
-		addOperation("+");
-	},
-	["-"]: () => {
-		addOperation("-");
-	},
-	["*"]: () => {
-		addOperation("*");
-	},
-	["/"]: () => {
-		addOperation("/");
-	},
-	["."]: () => {
-		if (displayCurrent.innerHTML === "")
-			displayCurrent.innerHTML += "0.";
-		else if (!displayCurrent.innerHTML.includes("."))
-			displayCurrent.innerHTML += ".";
-	},
-	["+/-"]: () => {
-		if (displayCurrent.innerHTML === "") return;
-
-		const currentNumber = displayCurrent.innerHTML;
-		if (currentNumber[0] === "-")
-			displayCurrent.innerHTML = currentNumber.slice(1);
-		else
-			displayCurrent.innerHTML = "-" + currentNumber;
-	},
-	["="]: () => {
-		addOperation("=");
-	}
-}
-
-const numberButtons = [...document.getElementsByClassName("btn-number")];
-numberButtons.forEach((btn) => {
-	btn.onclick = () => {
-		if (displayCurrent.innerHTML === "0" || displayCurrent.innerHTML === "-0")
-			if (btn.innerHTML !== "0" && displayCurrent.innerHTML[0] === "-")
-				displayCurrent.innerHTML = "-" + btn.innerHTML;
+			const currentNumber = this.numberEl.innerHTML;
+			if (currentNumber[0] === "-")
+				this.numberEl.innerHTML = currentNumber.slice(1);
 			else
-				displayCurrent.innerHTML = btn.innerHTML;
+				this.numberEl.innerHTML = '-' + currentNumber;
+		},
+		["+"]: () => {
+			this.addOperation("+");
+		},
+		["-"]: () => {
+			this.addOperation("-");
+		},
+		["*"]: () => {
+			this.addOperation("*");
+		},
+		["/"]: () => {
+			this.addOperation("/");
+		},
+		["="]: () => {
+			this.addOperation("=");
+		}
+	}
+
+	setCalculatorEvents(btnNumbers, btnOperations) {
+		btnNumbers.forEach((btn) => {
+			btn.onclick = () => {
+				this.addNumber(btn.innerHTML);
+			}
+		});
+
+		btnOperations.forEach((btn) => {
+			btn.onclick = () => {
+				if (this.operations[btn.innerHTML]) this.operations[btn.innerHTML]();
+			}
+		})
+	}
+
+	addNumber(number) {
+		if (this.numberEl.innerHTML === '0' || this.numberEl.innerHTML === '-0')
+			this.numberEl.innerHTML = number;
 		else
-			displayCurrent.innerHTML += btn.innerHTML;
+			this.numberEl.innerHTML += number;
 	}
-})
 
-const operationsButtons = [...document.getElementsByClassName("btn-operator")];
-operationsButtons.forEach((btn) => {
-	btn.onclick = () => {
-		if (operations[btn.innerHTML]) operations[btn.innerHTML]();
+	addOperation(operator) {
+		const currentNumber = this.numberEl.innerHTML;
+		const currentExpression = this.expressionEl.innerHTML.slice(0, -1);
+
+		if (currentNumber === '') {
+			this.expressionEl.innerHTML = `${currentExpression} ${operator}`;
+		} else {
+			this.expressionEl.innerHTML += ` ${currentNumber} ${operator}`;
+			this.expression = currentExpression.slice(0, -1);
+			this.numberEl.innerHTML = '';
+		}
+
+		if (operator === '=') {
+			this.numberEl.innerHTML = eval(this.expression);
+			this.expressionEl.innerHTML = '';
+			this.expression = '';
+		}
 	}
-})
-
-function init() {
-	displayCurrent.innerHTML = "0";
 }
 
-init();
+const myCalculator = new Calculator('.display-expression', '.display-number', '.btn-number', '.btn-operator');
